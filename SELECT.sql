@@ -81,6 +81,103 @@ SELECT NAME, DATETIME
 FROM ANIMAL_INS 
 ORDER BY ANIMAL_ID DESC;
 
--- 14
+-- 14 오프라인/온라인 판매 데이터 통합하기
+
+-- 15
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_INS 
+WHERE INTAKE_CONDITION = 'Sick'
+ORDER BY ANIMAL_ID;
+
+-- 16
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_INS 
+WHERE INTAKE_CONDITION != 'Aged'
+ORDER BY ANIMAL_ID;
+
+-- 17
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_INS 
+ORDER BY ANIMAL_ID;
+
+-- 18
+SELECT ANIMAL_ID, NAME, DATETIME
+FROM ANIMAL_INS 
+ORDER BY NAME, DATETIME DESC;
+
+-- 19
+SELECT NAME
+FROM ANIMAL_INS 
+ORDER BY DATETIME
+LIMIT 1;
+
+-- 20
+SELECT count(*)
+FROM USER_INFO 
+WHERE Year(JOINED) = 2021 and AGE BETWEEN 20 AND 29;
+
+-- 21 업그레이드 된 아이템 구하기
 
 
+-- 22
+SELECT ID, EMAIL, FIRST_NAME, LAST_NAME
+FROM DEVELOPER_INFOS 
+WHERE SKILL_1 = 'Python'
+        or SKILL_2 = 'Python'
+        or SKILL_3 = 'Python'
+ORDER BY ID;
+
+-- 23 조건에 맞는 개발자 찾기
+
+-- 24
+SELECT COUNT(*) as 'FISH_COUNT'
+FROM FISH_INFO 
+WHERE LENGTH <= 10 OR LENGTH is null;
+
+-- 25
+SELECT ID, LENGTH
+FROM FISH_INFO
+ORDER BY LENGTH DESC, ID
+LIMIT 10;
+
+-- 26
+SELECT count(*) as 'FISH_COUNT'
+FROM FISH_INFO FI join FISH_NAME_INFO FNI on FI.FISH_TYPE = FNI.FISH_TYPE
+WHERE FNI.FISH_NAME in ('BASS', 'SNAPPER');
+
+-- 27 대장균들의 자식의 수 구하기
+SELECT P.ID, count(C.id) as "CHILD_COUNT"
+FROM ECOLI_DATA as P 
+LEFT JOIN ECOLI_DATA as C
+ON P.ID = C.PARENT_ID
+group by P.id
+ORDER BY P.ID;
+
+-- 28 대장균의 크기에 따라 분류하기 1
+SELECT ID,
+CASE
+    WHEN SIZE_OF_COLONY <= 100 THEN 'LOW'
+    WHEN 100 < SIZE_OF_COLONY AND SIZE_OF_COLONY <= 1000 THEN 'MEDIUM'
+    WHEN 1000 < SIZE_OF_COLONY THEN 'HIGH'
+END AS SIZE
+FROM ECOLI_DATA
+ORDER BY ID;
+
+-- 29 특정 형질을 가지는 대장균 찾기
+
+-- 30 부모의 형질을 모두 가지는 대장균 찾기
+
+-- 31 대장균의 크기에 따라 분류하기 2
+SELECT ID,
+CASE
+    WHEN 0 <= percent_rank() over (order by SIZE_OF_COLONY desc)*100 and percent_rank() over (order by SIZE_OF_COLONY desc)*100 <= 25 THEN 'CRITICAL'
+    WHEN 26 <= percent_rank() over (order by SIZE_OF_COLONY desc)*100 and percent_rank() over (order by SIZE_OF_COLONY desc)*100 <= 50 THEN 'HIGH'
+    WHEN 51 <= percent_rank() over (order by SIZE_OF_COLONY desc)*100 and percent_rank() over (order by SIZE_OF_COLONY desc)*100 <=75 THEN 'MEDIUM'
+    WHEN 76 <= percent_rank() over (order by SIZE_OF_COLONY desc)*100 and percent_rank() over (order by SIZE_OF_COLONY desc)*100 <= 100 THEN 'LOW'
+END AS COLONY_NAME
+FROM ECOLI_DATA
+ORDER BY ID;
+
+-- 32 특정 세대의 대장균 찾기
+
+-- 33 멸종위기의 대장균 찾기
